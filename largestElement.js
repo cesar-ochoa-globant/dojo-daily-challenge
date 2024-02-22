@@ -1,28 +1,18 @@
 const findKthLargest = (nums, k) => {
-    const heap = [];
+    const heap = nums.slice(0, k);
 
-    nums.forEach(num => {
-        if (heap.length < k) {
-            heap.push(num);
-            heapifyUp(heap, heap.length - 1);
-        } else {
-            if (num > heap[0]) {
-                heap[0] = num;
-                heapifyDown(heap, 0);
-            }
+    for (let i = Math.floor(k / 2) - 1; i >= 0; i--) {
+        heapifyDown(heap, i);
+    }
+
+    for (let i = k; i < nums.length; i++) {
+        if (nums[i] > heap[0]) {
+            heap[0] = nums[i];
+            heapifyDown(heap, 0);
         }
-    });
+    }
 
     return heap[0];
-};
-
-const heapifyUp = (heap, index) => {
-    while (index > 0) {
-        const parentIndex = Math.floor((index - 1) / 2);
-        if (heap[parentIndex] <= heap[index]) break;
-        [heap[parentIndex], heap[index]] = [heap[index], heap[parentIndex]];
-        index = parentIndex;
-    }
 };
 
 const heapifyDown = (heap, index) => {
@@ -42,3 +32,5 @@ const heapifyDown = (heap, index) => {
         index = smallestIndex;
     }
 };
+
+findKthLargest([3,2,1,5,6,4], k = 2);
