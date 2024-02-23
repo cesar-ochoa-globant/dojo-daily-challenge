@@ -20,6 +20,5 @@ function multiplyStrings(num1, num2) {
     return result.join('');
 }
 
-// Test cases
-console.log(multiplyStrings("2", "3")); // Output: "6"
-console.log(multiplyStrings("123", "456")); // Output: "56088"
+console.log(multiplyStrings("2", "3")); 
+console.log(multiplyStrings("123", "456")); 
