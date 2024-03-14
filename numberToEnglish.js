@@ -35,7 +35,6 @@ function helper(number) {
     }
 }
 
-// Example usage:
-console.log(numberToEnglish(7)); // "seven"
-console.log(numberToEnglish(575)); // "five hundred seventy-five"
-console.log(numberToEnglish(78193512)); // "seventy-eight million one hundred ninety-three thousand five hundred twelve"
+console.log(numberToEnglish(7)); 
+console.log(numberToEnglish(575)); 
+console.log(numberToEnglish(78193512)); 
