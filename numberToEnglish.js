@@ -6,35 +6,49 @@ function numberToEnglish(number) {
 
     if (number === 0) return "zero";
 
-    let words = "";
-    let i = 0;
+    if (number < 0) {
+        return "negative " + numberToEnglish(-number);
+    }
 
-    while (number > 0) {
-        if (number % 1000 !== 0) {
-            words = helper(number % 1000) + thousands[i] + " " + words;
+    const integerPart = Math.floor(number);
+    const decimalPart = number - integerPart;
+
+    let integerWords = "";
+    let i = 0;
+    while (integerPart > 0) {
+        if (integerPart % 1000 !== 0) {
+            integerWords = helper(integerPart % 1000) + thousands[i] + " " + integerWords;
         }
-        number = Math.floor(number / 1000);
+        integerPart = Math.floor(integerPart / 1000);
         i++;
     }
 
-    return words.trim();
+    let decimalWords = "";
+    if (decimalPart > 0) {
+        decimalWords = "point ";
+        for (let digit of decimalPart.toString().split("").slice(2)) {
+            decimalWords += singleDigits[parseInt(digit)] + " ";
+        }
+    }
+
+    return (integerWords + decimalWords).trim();
 }
 
 function helper(number) {
-    switch (true) {
-        case number === 0:
-            return "";
-        case number < 10:
-            return singleDigits[number] + " ";
-        case number < 20:
-            return teens[number - 10] + " ";
-        case number < 100:
-            return tens[Math.floor(number / 10)] + " " + helper(number % 10);
-        default:
-            return singleDigits[Math.floor(number / 100)] + " hundred " + helper(number % 100);
+    if (number === 0) {
+        return "";
+    } else if (number < 10) {
+        return singleDigits[number] + " ";
+    } else if (number < 20) {
+        return teens[number - 10] + " ";
+    } else if (number < 100) {
+        return tens[Math.floor(number / 10)] + " " + helper(number % 10);
+    } else {
+        return singleDigits[Math.floor(number / 100)] + " hundred " + helper(number % 100);
     }
 }
 
 console.log(numberToEnglish(7)); 
 console.log(numberToEnglish(575)); 
 console.log(numberToEnglish(78193512)); 
+console.log(numberToEnglish(123.456)); 
