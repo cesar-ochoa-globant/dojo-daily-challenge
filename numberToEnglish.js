@@ -6,35 +6,28 @@ function numberToEnglish(number) {
 
     if (number === 0) return "zero";
 
-    if (number < 0) {
-        return "negative " + numberToEnglish(-number);
-    }
+    let words = "";
+    let i = 0;
 
     const integerPart = Math.floor(number);
-    const decimalPart = number - integerPart;
+    const decimalPart = number % 1;
 
-    let integerWords = "";
-    let i = 0;
-    while (integerPart > 0) {
-        if (integerPart % 1000 !== 0) {
-            integerWords = helper(integerPart % 1000) + thousands[i] + " " + integerWords;
-        }
-        integerPart = Math.floor(integerPart / 1000);
-        i++;
+    if (integerPart > 0) {
+        words += helper(integerPart, singleDigits, teens, tens, thousands);
+    } else {
+        words += singleDigits[0];
     }
 
-    let decimalWords = "";
     if (decimalPart > 0) {
-        decimalWords = "point ";
-        for (let digit of decimalPart.toString().split("").slice(2)) {
-            decimalWords += singleDigits[parseInt(digit)] + " ";
-        }
+        words += " point ";
+        const decimalString = decimalPart.toFixed(2).slice(2);
+        words += helper(parseInt(decimalString), singleDigits, teens, tens, thousands);
     }
 
-    return (integerWords + decimalWords).trim();
+    return words.trim();
 }
 
-function helper(number) {
+function helper(number, singleDigits, teens, tens, thousands) {
     if (number === 0) {
         return "";
     } else if (number < 10) {
@@ -42,13 +35,16 @@ function helper(number) {
     } else if (number < 20) {
         return teens[number - 10] + " ";
     } else if (number < 100) {
-        return tens[Math.floor(number / 10)] + " " + helper(number % 10);
+        return tens[Math.floor(number / 10)] + " " + helper(number % 10, singleDigits, teens, tens, thousands);
+    } else if (number < 1000) {
+        return singleDigits[Math.floor(number / 100)] + " hundred " + helper(number % 100, singleDigits, teens, tens, thousands);
     } else {
-        return singleDigits[Math.floor(number / 100)] + " hundred " + helper(number % 100);
+        let words = helper(Math.floor(number / 1000), singleDigits, teens, tens, thousands) + " thousand ";
+        words += helper(number % 1000, singleDigits, teens, tens, thousands);
+        return words;
     }
 }
 
 console.log(numberToEnglish(7)); 
-console.log(numberToEnglish(575)); 
-console.log(numberToEnglish(78193512)); 
-console.log(numberToEnglish(123.456)); 
+console.log(numberToEnglish(575.21)); 
+console.log(numberToEnglish(78193512.48));
