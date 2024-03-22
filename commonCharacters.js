@@ -1,23 +1,29 @@
 function commonCharacters(...strings) {
-    const charSets = strings.map(str => new Set(str));
-    const charCounts = {};
+    const counts = {};
     
-    for (const charSet of charSets) {
-        for (const char of charSet) {
-            charCounts[char] = (charCounts[char] || 0) + 1;
+    for (const char of strings[0]) {
+        counts[char] = (counts[char] || 0) + 1;
+    }
+    
+    for (let i = 1; i < strings.length; i++) {
+        const currentCounts = {};
+        for (const char of strings[i]) {
+            if (counts[char]) {
+                currentCounts[char] = (currentCounts[char] || 0) + 1;
+            }
+        }
+        for (const char in counts) {
+            counts[char] = Math.min(counts[char], currentCounts[char] || 0);
         }
     }
     
     let result = '';
-    
-    for (const char in charCounts) {
-        if (charCounts[char] === strings.length) {
-            result += char.repeat(charCounts[char]);
-        }
+    for (const char in counts) {
+        result += char.repeat(counts[char]);
     }
     
     return result;
 }
 
 console.log(commonCharacters('acexivou', 'aegihobu')); 
-console.log(commonCharacters('abc', 'abcx')); 
+console.log(commonCharacters('abc', 'abcx'));
